@@ -45,6 +45,7 @@ public class WeatherServlet extends HttpServlet {
     }
 
     private void setCorsHeaders(HttpServletResponse response) {
+        //response.setHeader("Access-Control-Allow-Origin", "http://localhost:4200");
         response.setHeader("Access-Control-Allow-Origin", "http://52.203.12.227");
         response.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
         response.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");

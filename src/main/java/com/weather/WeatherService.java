@@ -1,42 +1,37 @@
 package com.weather;
 
-import com.util.Constants;
+import java.net.URI;
+import java.net.URLEncoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
+import com.util.Constants;
 
 public class WeatherService {
 
     public String getWeatherData(String location) throws Exception {
-        String apiUrl = Constants.BASE_URL + "/current.json?q=" + location;
-        URL url = new URL(apiUrl);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setRequestMethod("GET");
+        // Encode the location to handle spaces and special characters
+        String encodedLocation = URLEncoder.encode(location, StandardCharsets.UTF_8);
+        String apiUrl = Constants.BASE_URL + "/current.json?q=" + encodedLocation;
 
-        // Add the required headers before making the request
-        conn.setRequestProperty(Constants.API_HOST_HEADER_NAME, Constants.API_HOST_HEADER_VALUE);
-        conn.setRequestProperty(Constants.API_KEY_HEADER_NAME, Constants.API_KEY_HEADER_VALUE);
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(apiUrl))
+                .header(Constants.API_HOST_HEADER_NAME, Constants.API_HOST_HEADER_VALUE)
+                .header(Constants.API_KEY_HEADER_NAME, Constants.API_KEY_HEADER_VALUE)
+                .GET()
+                .build();
 
-        // Check the response code
-        int responseCode = conn.getResponseCode();
-        System.out.println("Response Code :: " + responseCode);
-        if (responseCode == 200) { // OK
-            // Read the response from the input stream
-            BufferedReader in = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            return response.toString();
+        if (response.statusCode() == 200) {
+            return response.body();
         } else {
-            throw new Exception("Failed to get weather data. HTTP response code: " + responseCode);
+            throw new Exception("Failed to get weather data. HTTP response code: " + response.statusCode());
         }
+
     }
 
 }
