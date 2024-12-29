@@ -6,7 +6,7 @@ COPY src ./src
 RUN mvn clean package -DskipTests
 
 # Second Stage: Use a lightweight runtime image
-FROM tomcat:9.0-jdk17-temurin
+FROM tomcat:10.1.34-jdk17-temurin-noble
 WORKDIR /usr/local/tomcat
 COPY --from=builder /app/target/WeatherProxyService.war webapps/ROOT.war
 EXPOSE 8080
