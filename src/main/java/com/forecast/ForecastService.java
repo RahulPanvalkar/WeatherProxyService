@@ -13,7 +13,7 @@ public class ForecastService {
     public String getForecastData(String location) throws Exception {
         // Encode the location to handle spaces and special characters
         String encodedLocation = URLEncoder.encode(location, StandardCharsets.UTF_8);
-        String apiUrl = Constants.BASE_URL + "/forecast.json?q="+encodedLocation+"&days=3";
+        String apiUrl = Constants.BASE_URL + "/forecast.json?q=" + encodedLocation + "&days=3";
 
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
