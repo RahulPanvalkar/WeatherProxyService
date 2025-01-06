@@ -1,0 +1,11 @@
+services:
+    weather-proxy-service:
+        image: weather-proxy-service:latest
+        container_name: weatherapp
+        environment:
+            CORS_ALLOWED_ORIGIN: ${CORS_ALLOWED_ORIGIN}
+            API_KEY_HEADER_VALUE: ${API_KEY_HEADER_VALUE}
+        ports:
+            - "8080:8080"
+        volumes:
+            - ./target:/usr/local/tomcat/webapps
