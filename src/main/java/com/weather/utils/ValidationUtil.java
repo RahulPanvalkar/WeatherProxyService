@@ -10,7 +10,18 @@ public class ValidationUtil {
      * @return true if the string is invalid, false otherwise.
      */
     public static boolean isInvalidString(String str) {
-        return (str == null || str.isEmpty());
+        return (str == null || str.trim().isEmpty());
+    }
+
+    /**
+     * Validates the city name based on specific criteria.
+     * @param cityName The name of the city to validate.
+     * @return true if the city name is invalid (does not match the required pattern),
+     *         false if the city name is valid.
+     */
+    public static boolean isInvalidCity(String cityName) {
+        String regex = "^[a-zA-Z\\s]{2,30}$"; // Allows alphabets and spaces, with length between 2 and 30
+        return !cityName.matches(regex); // Returns true if regex does not match
     }
 
     /**

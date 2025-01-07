@@ -30,16 +30,24 @@ public class ForecastService {
 
     /**
      * Fetches the weather forecast for a given city.
+     *
      * @param city The city name.
      * @return ApiResponse containing forecast data or error details.
      */
     public ApiResponse getForecastByCity(String city) {
         String msg = "";
         try {
-            // Validate city input
+            // Null or empty String Validation for city input
             if (ValidationUtil.isInvalidString(city)) {
                 ErrorDetails errorDetails = new ErrorDetails(400, "City name is required.");
                 msg = "City name cannot be blank";
+                return new ApiResponse(false, msg, errorDetails);
+            }
+
+            // Validate city name
+            if (ValidationUtil.isInvalidCity(city)) {
+                ErrorDetails errorDetails = new ErrorDetails(400, "Invalid City name.");
+                msg = "City name must contain only alphabets and spaces, up to 30 letters.";
                 return new ApiResponse(false, msg, errorDetails);
             }
 
@@ -74,7 +82,8 @@ public class ForecastService {
 
     /**
      * Fetches the weather forecast using coordinates (latitude, longitude).
-     * @param latitude The latitude value.
+     *
+     * @param latitude  The latitude value.
      * @param longitude The longitude value.
      * @return ApiResponse containing forecast data or error details.
      */
@@ -127,9 +136,10 @@ public class ForecastService {
 
     /**
      * Method to build and Send an HTTP request to the weather API.
+     *
      * @param apiUrl The URL to send the request to.
      * @return The response from the API.
-     * @throws IOException If an error occurs while sending the request.
+     * @throws IOException          If an error occurs while sending the request.
      * @throws InterruptedException If the request is interrupted.
      */
     private HttpResponse<String> sendHttpRequest(String apiUrl) throws IOException, InterruptedException {

@@ -37,10 +37,17 @@ public class WeatherService {
     public ApiResponse getWeatherByCity(String city) {
         String msg = "";
         try {
-            // Validate city input
+            // Null or empty String Validation for city input
             if (ValidationUtil.isInvalidString(city)) {
                 ErrorDetails errorDetails = new ErrorDetails(400, "City name is required.");
                 msg = "City name cannot be blank";
+                return new ApiResponse(false, msg, errorDetails);
+            }
+
+            // Validate city name
+            if (ValidationUtil.isInvalidCity(city)) {
+                ErrorDetails errorDetails = new ErrorDetails(400, "Invalid City name.");
+                msg = "City name must contain only alphabets and spaces, up to 30 letters.";
                 return new ApiResponse(false, msg, errorDetails);
             }
 
