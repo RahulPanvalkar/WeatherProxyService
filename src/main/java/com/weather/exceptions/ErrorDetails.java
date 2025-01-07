@@ -1,6 +1,7 @@
 package com.weather.exceptions;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 /**
  * This class represents the error details to be included in an API response.
@@ -15,7 +16,7 @@ public class ErrorDetails {
     private String details;
 
     // The timestamp when the error occurred.
-    private LocalDateTime timeStamp;
+    private String timestamp;
 
     // Default constructor
     public ErrorDetails() {
@@ -28,7 +29,7 @@ public class ErrorDetails {
     public ErrorDetails(int code, String details) {
         this.code = code;
         this.details = details;
-        this.timeStamp = LocalDateTime.now();  // Capture the current time for when the error occurred
+        this.timestamp = getTimestamp();  // Capture the current time for when the error occurred
     }
 
     // Getters and Setters
@@ -48,12 +49,8 @@ public class ErrorDetails {
         this.details = details;
     }
 
-    public LocalDateTime getTimeStamp() {
-        return timeStamp;
-    }
-
-    public void setTimeStamp(LocalDateTime timeStamp) {
-        this.timeStamp = timeStamp;
+    public String getTimeStamp() {
+        return timestamp;
     }
 
     /**
@@ -61,6 +58,18 @@ public class ErrorDetails {
      */
     @Override
     public String toString() {
-        return String.format("ErrorDetails: {code=%d, details='%s', timeStamp='%s'}", code, details, timeStamp);
+        return String.format("ErrorDetails: {code=%d, details='%s', timeStamp='%s'}", code, details, timestamp);
+    }
+
+    // Method to get the current timestamp in a custom format
+    private String getTimestamp() {
+        // Get the current datetime
+        LocalDateTime dateTime = LocalDateTime.now();
+
+        // Create a DateTimeFormatter with a custom pattern to format the date-time
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
+
+        // Format the LocalDateTime using the DateTimeFormatter and return it as a string
+        return dateTime.format(formatter);
     }
 }
